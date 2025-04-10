@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Image Processing Web Application</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(45deg, #ffecd2, #fcb69f);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      transition: background 1s ease-in-out;
+    }
+
+    .container {
+      background: linear-gradient(45deg, #5d86da, #ffffff);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      width: 95vw;
+      height: 65vh;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: background 1s ease-in-out;
+    }
+
+    .container.compact {
+      height: 90vh;
+      padding: 20px;
+    }
+
+    .container.compact .upload-label {
+      height: auto;
+      width: auto;
+      font-size: 2.5vw;
+      padding: 10px;
+    }
+
+    .container.compact .image-container img {
+      width: 30%;
+      height: 45vh;
+      margin-top: -2vh;
+    }
+
+    .container.compact h1 {
+      font-size: 3.5vw;
+    }
+
+    h1 {
+      font-style: italic;
+      margin-bottom: 30px;
+      color: #333;
+      font-size: 4.5vw;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .upload-label {
+      display: block;
+      background: #ff758c;
+      color: white;
+      padding: 15px;
+      padding-top: 25px;
+      height: 10vh;
+      width: 30vw;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      position: relative;
+      top: 5vh;
+      font-style: italic;
+      font-size: 3vw;
+    }
+
+    .upload-label:hover {
+      background: #ff527b;
+    }
+
+    .image-container {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      width: 100%;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .image-container img {
+      width: 40%;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .sliders, .reset-button {
+      display: none;
+      flex-direction: row;
+      align-items: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .dropdown {
+      display: none;
+      flex-direction: row;
+      position: relative;
+      left: -10vw;
+      height: 13vh;
+      margin-top: 20px;
+    }
+
+    .dropdown select {
+      padding: 10px;
+      margin-left: 0px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-style: italic;
+      font-weight: 700;
+    }
+
+    .slider-container {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-right: 20px;
+    }
+
+    .control-slider {
+      height: 5vh;
+      width: 15vw;
+      accent-color: beige;
+    }
+
+    .reset-button {
+      margin-top: 20px;
+      padding: 15px 20px;
+      background: #ff527b;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.3vw;
+      padding-top: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      height: 5.2vh;
+      width: 15vw;
+      font-style: italic;
+      font-weight: 700;
+      position: relative;
+      top: -7.6vh;
+      left: 10vw;
+    }
+
+    .reset-button:hover {
+      background: #ff758c;
+    }
+
+    /* Responsive Design */
+
+    /* Phones */
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px;
+        height: auto;
+        width: 100vw;
+      }
+
+      h1 {
+        font-size: 6vw;
+      }
+
+      .upload-label {
+        width: 70vw;
+        font-size: 4vw;
+        height: auto;
+        padding: 15px 10px;
+      }
+
+      .image-container img {
+        width: 80%;
+        margin-top: 10px;
+      }
+
+      .control-slider {
+        width: 20vw;
+      }
+
+      .dropdown {
+        left: 0;
+        justify-content: center;
+        width: 100%;
+      }
+
+      .dropdown select {
+        font-size: 14px;
+        width: 70vw;
+      }
+
+      .reset-button {
+        font-size: 4vw;
+        width: auto;
+        height: auto;
+        top: 0;
+        left: 0;
+        position: static;
+      }
+    }
+
+    /* Tablets */
+    @media (min-width: 481px) and (max-width: 768px) {
+      h1 {
+        font-size: 6vw;
+      }
+
+      .upload-label {
+        width: 60vw;
+        font-size: 3.5vw;
+      }
+
+      .image-container img {
+        width: 45%;
+      }
+
+      .control-slider {
+        width: 25vw;
+      }
+
+      .reset-button {
+        font-size: 1.5vw;
+        position: relative;
+        top: -11vh;
+        left: 20vw;
+        padding-top: 10px;
+        height: 18vh;
+        width: 25vw;
+      }
+    }
+
+    /* Laptops */
+    @media (min-width: 769px) and (max-width: 1200px) {
+      h1 {
+        font-size: 6vw;
+      }
+
+      .upload-label {
+        font-size: 2.5vw;
+      }
+
+      .control-slider {
+        width: 25vw;
+      }
+
+      .reset-button {
+        font-size: 1.5vw;
+        position: relative;
+        top: -11vh;
+        left: 18vw;
+        padding-top: 10px;
+        height: 10vh;
+        width: 25vw;
+      }
+    }
+
+    /* TVs and large screens */
+    @media (min-width: 1201px) {
+      h1 {
+        font-size: 5vw;
+      }
+
+      .upload-label {
+        font-size: 2vw;
+      }
+
+      .image-container img {
+        width: 35%;
+      }
+
+      .control-slider {
+        width: 15vw;
+      }
+
+      .reset-button {
+        font-size: 1vw;
+        width: 15vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="container">
+    <h1>Image Processing Web Application</h1>
+    <label class="upload-label" id="uploadLabel" for="upload">Choose Image</label>
+    <input type="file" id="upload" accept="image/*">
+    <div class="image-container">
+      <img id="original" src="" alt="Original Image" style="display: none;">
+      <img id="processed" src="" alt="Processed Image" style="display: none;">
+    </div>
+    <div class="sliders">
+      <div class="slider-container">
+        <label><i><b>Brightness</b></i></label>
+        <input type="range" id="brightness" class="control-slider" min="0" max="200" value="100">
+      </div>
+      <div class="slider-container">
+        <label><i><b>Contrast</b></i></label>
+        <input type="range" id="contrast" class="control-slider" min="0" max="200" value="100">
+      </div>
+      <div class="slider-container">
+        <label><i><b>Saturation</b></i></label>
+        <input type="range" id="saturation" class="control-slider" min="0" max="200" value="100">
+      </div>
+    </div>
+    <div class="dropdown">
+      <select id="operation">
+        <option value=""><i><b>Select...Operation</b></i></option>
+        <option value="grayscale">Grayscale</option>
+        <option value="invert">Invert Colors</option>
+        <option value="blur">Blur</option>
+        <option value="gaussian-blur">Gaussian Blur</option>
+        <option value="sharpen">Sharpen</option>
+        <option value="edge-detection">Edge Detection</option>
+        <option value="sepia">Sepia</option>
+      </select>
+    </div>
+    <button class="reset-button" id="reset">New Image</button>
+  </div>
+
+  <script>
+    const uploadInput = document.getElementById('upload');
+    const uploadLabel = document.getElementById('uploadLabel');
+    const originalImage = document.getElementById('original');
+    const processedImage = document.getElementById('processed');
+    const sliders = document.querySelector('.sliders');
+    const dropdown = document.querySelector('.dropdown');
+    const operationSelect = document.getElementById('operation');
+    const resetButton = document.getElementById('reset');
+    const brightnessSlider = document.getElementById('brightness');
+    const contrastSlider = document.getElementById('contrast');
+    const saturationSlider = document.getElementById('saturation');
+    const container = document.getElementById('container');
+
+    const lightGradients = [
+      "linear-gradient(45deg, #ffecd2, #fcb69f)",
+      "linear-gradient(45deg, #d4fc79, #96e6a1)",
+      "linear-gradient(45deg, #cfd9df, #e2ebf0)",
+      "linear-gradient(45deg, #ffdde1, #ee9ca7)",
+      "linear-gradient(45deg, #a1c4fd, #c2e9fb)"
+    ];
+
+    function changeBackgrounds() {
+      const randomGradient = lightGradients[Math.floor(Math.random() * lightGradients.length)];
+      document.body.style.background = randomGradient;
+      container.style.background = randomGradient;
+    }
+
+    setInterval(changeBackgrounds, 10000);
+
+    uploadInput.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          originalImage.src = e.target.result;
+          processedImage.src = e.target.result;
+          originalImage.style.display = 'block';
+          processedImage.style.display = 'block';
+          sliders.style.display = 'flex';
+          dropdown.style.display = 'flex';
+          uploadLabel.style.display = 'none';
+          resetButton.style.display = 'block';
+          container.classList.add('compact');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    brightnessSlider.addEventListener('input', applyFilter);
+    contrastSlider.addEventListener('input', applyFilter);
+    saturationSlider.addEventListener('input', applyFilter);
+    operationSelect.addEventListener('change', applyFilter);
+
+    function applyFilter() {
+      const brightness = brightnessSlider.value;
+      const contrast = contrastSlider.value;
+      const saturation = saturationSlider.value;
+      const operation = operationSelect.value;
+
+      let filter = `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%)`;
+
+      if (operation === 'grayscale') filter += ' grayscale(100%)';
+      else if (operation === 'invert') filter += ' invert(100%)';
+      else if (operation === 'blur') filter += ' blur(5px)';
+      else if (operation === 'gaussian-blur') filter += ' blur(10px)';
+      else if (operation === 'sharpen') filter += ' contrast(150%)';
+      else if (operation === 'edge-detection') filter += ' contrast(200%) grayscale(100%)';
+      else if (operation === 'sepia') filter += ' sepia(100%)';
+
+      processedImage.style.filter = filter;
+    }
+
+    resetButton.addEventListener('click', function() {
+      uploadInput.value = "";
+      originalImage.style.display = 'none';
+      processedImage.style.display = 'none';
+      sliders.style.display = 'none';
+      dropdown.style.display = 'none';
+      processedImage.style.filter = "none";
+      uploadLabel.style.display = 'block';
+      resetButton.style.display = 'none';
+      container.classList.remove('compact');
+    });
+  </script>
+</body>
+</html>
